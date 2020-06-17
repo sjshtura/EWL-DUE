@@ -2,6 +2,7 @@ from bokeh.core.properties import value
 from bokeh.plotting import figure, show, output_file
 from bokeh.layouts import row
 from bokeh.models import Legend
+from bokeh.io import export_svgs
 
 output_file('stacked.html')
 
@@ -62,4 +63,6 @@ s2.outline_line_color = None
 # p.legend.location = "top_left"
 # p.legend.orientation = "vertical"
 p = row(s1, s2)
+p.output_backend = "svg"
+export_svgs(p, filename="plot.svg")
 show(p)
