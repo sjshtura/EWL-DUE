@@ -4,16 +4,29 @@ from bokeh.models import NumeralTickFormatter
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import Title
 import pandas as pd
+#names1 = ["Total_Co2_Emissions","Pol_Inst","Technologie","Shock","Lignite","Coal","CCGT","OCGT","Wind_Onshore","Wind_Offshore","Solar","LitIon","PSH","Total"]
+data = pd.read_excel(r'Figures_Data_Preparation_9-12.xlsx', sheet_name = 'Figure 9-12', skiprows=[1])
+#df = df.set_index([df.iloc[0], df.columns[0]])
+data.head()
 
-data = pd.read_excel(r'/Users/shakhawat_hossain_turag/Desktop/Uni/Energiewirtschaft /Copy of Figures_Data_Preparation.xlsx', sheet_name = 'Figure 8')
+#%%
+data.columns
+
+
+#%%
+data = data[['Total_CO2_Emissions', 'Pol_Inst', 'Technologie', 'Shock','Lignite', 'Coal', 'CCGT', 'OCGT', 'Wind_Onshore', 'Wind_Offshore',
+       'Solar', 'LitIon', 'PSH', 'Total']]
 
 data.head()
 
-data1 = data[["Pol_Inst","Technologie","Mean_Quantity_El_Price_Enduser"]]
-data2 = data1.dropna()
+
+#%%
+
+data2 = data.dropna()
 capacity = data['Pol_Inst'].unique()
 types = data['Technologie'].unique()
 print(data2)
+
 
 #%%
 
