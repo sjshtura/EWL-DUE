@@ -24,4 +24,28 @@ client.query_unavailability_of_generation_units(country_code, start=start,end=en
 #client.query_withdrawn_unavailability_of_generation_units('DE', start=start,end=end)
 
 ts = client.query_day_ahead_prices(country_code, start=start, end=end)
-ts.to_csv('outfile.csv')
+
+
+ts1 = ts.to_frame(name = "value")
+print(ts1)
+for col in ts1.columns:
+    print(col)
+print(ts1.index)
+print(ts1.value)
+
+import mysql.connector
+
+mydb = mysql.connector.connect(
+    host = "localhost",
+    user = "root",
+    passwd = "123456",
+    database = "entsoe"
+)
+
+mycursor = mydb.cursor()
+
+mycursor.execute('''Drop Table IF Exists entsoedata''')
+mycursor.execute('''create table entsoedata(datedata datet , vals text )''')
+mycursor.execute('''Insert Into  entsoedata VALUES (%s,%s)''', (ts1.index[0], ts1['value'][0]))
+mydb.commit()
+
