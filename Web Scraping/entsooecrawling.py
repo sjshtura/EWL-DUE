@@ -1,6 +1,7 @@
 
 from entsoe import EntsoePandasClient
 import pandas as pd
+import mysql.connector
 
 client = EntsoePandasClient(api_key='c4d117a2-f140-492b-bc2b-d615ec5774f4')
 
@@ -27,25 +28,34 @@ ts = client.query_day_ahead_prices(country_code, start=start, end=end)
 
 
 ts1 = ts.to_frame(name = "value")
-print(ts1)
+
+ts1 = ts1.reset_index()
+#print(ts1)
 for col in ts1.columns:
     print(col)
-print(ts1.index)
-print(ts1.value)
+#ts1.index = ts1.tz_convert('')
+#print(ts1['index'])
 
-import mysql.connector
+from datetime import datetime
+import numpy as np
 
-mydb = mysql.connector.connect(
-    host = "localhost",
-    user = "root",
-    passwd = "123456",
-    database = "entsoe"
-)
+#ts1['index'] = pd.to_datetime(ts1['index'], format='%Y%m%d %H:%M:%S', errors='coerce')
+print(type(ts1['index']))
 
-mycursor = mydb.cursor()
 
-mycursor.execute('''Drop Table IF Exists entsoedata''')
-mycursor.execute('''create table entsoedata(datedata datet , vals text )''')
-mycursor.execute('''Insert Into  entsoedata VALUES (%s,%s)''', (ts1.index[0], ts1['value'][0]))
-mydb.commit()
+
+
+# mydb = mysql.connector.connect(
+#     host = "localhost",
+#     user = "root",
+#     passwd = "12345678",
+#     database = "entsoedb"
+# )
+#
+# mycursor = mydb.cursor()
+#
+# mycursor.execute('''Drop Table IF Exists entsoedata''')
+# mycursor.execute('''create table entsoedata (datedata Text , vals Text)''')
+# mycursor.execute('''Insert Into  entsoedata VALUES (%s,%s)''', (ts1.index, ts1['value']))
+# mydb.commit()
 
